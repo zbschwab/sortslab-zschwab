@@ -55,9 +55,11 @@ public class Sorts {
 
     /**
      * Sorts the array according to the merge sort algorithm:
-     * <pre>
-     * [ sorted | sorted ] -> [ sorted ]
-     * </pre>
+     * <ol>
+     * <li>Sort the left half of the array recursively.</li>
+     * <li>Sort the right half of the array recursively.</li>
+     * <li>Merge the two sorted halves into a sorted whole.</li>
+     * </ol>
      * @param <T> the carrier type of the array
      * @param arr the array to sort
      */
@@ -67,11 +69,13 @@ public class Sorts {
 
     /**
      * Sorts the array according to the quick sort algorithm:
-     * <pre>
-     * []
-     * </pre>
-     * @param <T>
-     * @param arr
+     * <ol>
+     * <li>Choose a pivot value and partition the array according to the pivot.</li>
+     * <li>Sort the left half of the array recursively.</li>
+     * <li>Sort the right half of the array recursively.</li>
+     * </ol>
+     * @param <T> the carrier type of the array
+     * @param arr the array to sort
      */
     public static <T extends Comparable<? super T>> void quickSort(T[] arr) {
         // TODO: fill me in!
