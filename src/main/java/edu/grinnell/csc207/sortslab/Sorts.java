@@ -25,8 +25,24 @@ public class Sorts {
      * @param <T> the carrier type of the array
      * @param arr the array to sort
      */
+
+    /* note: i know the swapped bool is an optimzation not involved in classic 
+     * bubblesort, i just couldn't help myself. */
     public static <T extends Comparable<? super T>> void bubbleSort(T[] arr) {
-        // TODO: fill me in!
+        for (int i = 0; i < arr.length-1; i++) {
+            boolean swapped = false;
+            for (int j = 0; j < arr.length-1; j++) {
+                // true when j is of higher order than j+1
+                if (arr[j].compareTo(arr[j+1]) > 0) {
+                    swap(arr, j, j+1);
+                    swapped = true;
+                }
+            }
+            // stop walk when whole arr is ordered 
+            if (!swapped) {
+                break;
+            }
+        }
     }
 
     /**
@@ -38,7 +54,15 @@ public class Sorts {
      * @param arr the array to sort
      */
     public static <T extends Comparable<? super T>> void selectionSort(T[] arr) {
-        // TODO: fill me in!
+        for (int i = 0; i < arr.length; i++) {
+            int min_idx = i;
+            for (int j = i; j < arr.length; j++) {
+                if (arr[min_idx].compareTo(arr[j]) > 0) {
+                    min_idx = j;
+                }
+            }
+            swap(arr, i, min_idx);
+        }
     }
 
     /**
@@ -50,7 +74,15 @@ public class Sorts {
      * @param arr the array to sort
      */
     public static <T extends Comparable<? super T>> void insertionSort(T[] arr) {
-        // TODO: fill me in!
+        for (int i = 1; i < arr.length; i++) {
+            for (int j = 0; j < i; j++) {
+                if (arr[i].compareTo(arr[j]) < 1) {
+                    T tmp = arr[i];
+                    System.arraycopy(arr, j, arr, j+1, i-j);
+                    arr[j] = tmp;
+                }
+            }
+        }
     }
 
     /**
@@ -64,7 +96,24 @@ public class Sorts {
      * @param arr the array to sort
      */
     public static <T extends Comparable<? super T>> void mergeSort(T[] arr) {
-        // TODO: fill me in!
+        mergeSortHelper(arr, 0, arr.length-1);
+
+        int fst = 0;
+        int lst = arr.length;
+        int mid = lst / 2 + 1;
+        mergeSortHelper(arr, fst, mid);
+        mergeSortHelper(arr, mid, lst);
+
+    }
+
+    public static <T extends Comparable<? super T>> void mergeSortHelper(T[] arr, int fst, int lst) {
+        if (fst == lst) { // >=
+            return;
+        }
+        int mid = lst / 2;
+        if (arr[fst].compareTo(arr[lst]) > 0) {
+            swap(arr, fst, lst);
+        }
     }
 
     /**
