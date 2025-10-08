@@ -95,25 +95,40 @@ public class Sorts {
      * @param <T> the carrier type of the array
      * @param arr the array to sort
      */
+
+    @SuppressWarnings("unchecked")
     public static <T extends Comparable<? super T>> void mergeSort(T[] arr) {
-        mergeSortHelper(arr, 0, arr.length-1);
-
         int fst = 0;
-        int lst = arr.length;
-        int mid = lst / 2 + 1;
-        mergeSortHelper(arr, fst, mid);
-        mergeSortHelper(arr, mid, lst);
+        int lst = arr.length - 1;
 
+        mergeHelper(arr, fst, lst / 2, lst);
+        T[] new_arr = java.util.Arrays.copyOf(arr, arr.length);
+        sortHelper(arr, new_arr, fst, lst/2, 0);
     }
 
-    public static <T extends Comparable<? super T>> void mergeSortHelper(T[] arr, int fst, int lst) {
-        if (fst == lst) { // >=
+    public static <T extends Comparable<? super T>> void mergeHelper(T[] arr, int fst, int mid, int lst) {
+        if (fst == lst) {
+            return;
+        } 
+
+        mergeHelper(arr, fst, ((fst + mid) / 2), mid);
+        mergeHelper(arr, mid + 1, ((mid + lst) / 2), lst);
+    }
+
+
+    public static <T extends Comparable<? super T>> void sortHelper(T[] arr, T[] new_arr, int cur1, int cur2, int new_cur) {
+        if (new_cur == new_arr.length - 1) {
             return;
         }
-        int mid = lst / 2;
-        if (arr[fst].compareTo(arr[lst]) > 0) {
-            swap(arr, fst, lst);
+        
+        if (arr[cur1].compareTo(arr[cur2]) < 0) {
+            new_arr[new_cur] = arr[cur1];
+            cur1++;
+        } else if (arr[cur1].compareTo(arr[cur2]) >= 0) {
+            new_arr[new_cur] = arr[cur2];
+            cur2++;
         }
+        new_cur++;
     }
 
     /**
