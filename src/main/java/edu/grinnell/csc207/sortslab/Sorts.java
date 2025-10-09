@@ -98,37 +98,52 @@ public class Sorts {
 
     @SuppressWarnings("unchecked")
     public static <T extends Comparable<? super T>> void mergeSort(T[] arr) {
-        int fst = 0;
-        int lst = arr.length - 1;
-
-        mergeHelper(arr, fst, lst / 2, lst);
+        if (arr == null || arr.length <= 1) return;
         T[] new_arr = java.util.Arrays.copyOf(arr, arr.length);
-        sortHelper(arr, new_arr, fst, lst/2, 0);
+
+        mergeHelper(arr, new_arr, 0, arr.length-1);
     }
 
-    public static <T extends Comparable<? super T>> void mergeHelper(T[] arr, int fst, int mid, int lst) {
-        if (fst == lst) {
-            return;
-        } 
+    public static <T extends Comparable<? super T>> void mergeHelper(T[] arr, T[] new_arr, int fst, int lst) {
+        if (fst == lst) return;
 
-        mergeHelper(arr, fst, ((fst + mid) / 2), mid);
-        mergeHelper(arr, mid + 1, ((mid + lst) / 2), lst);
+        int mid = (fst + lst) / 2;
+
+        mergeHelper(arr, new_arr, fst, mid);
+        mergeHelper(arr, new_arr, mid+1, lst);
+        sortHelper(arr, new_arr, fst, mid+1, fst);
     }
 
 
     public static <T extends Comparable<? super T>> void sortHelper(T[] arr, T[] new_arr, int cur1, int cur2, int new_cur) {
-        if (new_cur == new_arr.length - 1) {
-            return;
+        int mid = cur2;
+        if (new_cur == new_arr.length) return;
+
+        while((cur1 <= mid) && (cur2 < new_arr.length)) {
+            if (arr[cur1].compareTo(arr[cur2]) < 0) {
+                new_arr[new_cur] = arr[cur1];
+                cur1++;
+            } else {
+                new_arr[new_cur] = arr[cur2];
+                cur2++;
+            } 
+            new_cur++;
         }
-        
-        if (arr[cur1].compareTo(arr[cur2]) < 0) {
+
+        // catch cursors up after 1 half is fully sorted
+        while (cur1 <= mid) {
             new_arr[new_cur] = arr[cur1];
+            new_cur++;
             cur1++;
-        } else if (arr[cur1].compareTo(arr[cur2]) >= 0) {
+        }
+        while (cur2 < new_arr.length) {
             new_arr[new_cur] = arr[cur2];
+            new_cur++;
             cur2++;
         }
-        new_cur++;
+
+        // write back to old array
+        System.arraycopy(new_arr, 0, arr, 0, arr.length);
     }
 
     /**
