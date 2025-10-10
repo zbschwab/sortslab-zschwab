@@ -156,39 +156,33 @@ public class Sorts {
      * @param arr the array to sort
      */
     public static <T extends Comparable<? super T>> void quickSort(T[] arr) {
-        int cur1 = 0;
-        int cur2 = arr.length - 1;
-
-        Random rand = new Random();
-        int part = rand.nextInt(arr.length);
-
-        swap(arr, part, cur2);
-        cur2--;
-
-        quickSortHelper(arr, cur1, cur2);
-
-        cur1 = arr.length - 1;
-        cur2 = arr.length - 1;
-        boolean order = false;
-        while (!order) {
-            if (arr[cur2].compareTo(arr[cur1]) < 0) {
-                swap(arr, cur1+1, cur2);
-                order = true;
-            }
-            cur1--;
-        }
+        quickSortHelper(arr, 0, arr.length - 1);
     }
 
     public static <T extends Comparable<? super T>> void quickSortHelper(T[] arr, int cur1, int cur2) {
         if (cur1 >= cur2) return;
-        
-        if (arr[cur1].compareTo(arr[cur2]) > 0) {
-            swap(arr, cur1, cur2);
-            cur1++;
-        } else {
-            cur2--;
+
+        int c1 = cur1;
+        int c2 = cur2 - 1;
+
+        Random rand = new Random();
+        int part = rand.nextInt(cur1, cur2 + 1);
+
+        swap(arr, part, cur2);
+
+        while (c1 <= c2) {
+            if (arr[c1].compareTo(arr[cur2]) <= 0) {
+                c1++;
+            } else {
+                swap(arr, c1, c2);
+                c2--;
+            }
         }
 
-        quickSortHelper(arr, cur1, cur2);
+        swap(arr, c1, cur2);  // place pivot in back
+
+        // recurse on both sides
+        quickSortHelper(arr, cur1, c1 - 1);
+        quickSortHelper(arr, c1 + 1, cur2);
     }
 }
