@@ -105,46 +105,43 @@ public class Sorts {
     }
 
     public static <T extends Comparable<? super T>> void mergeHelper(T[] arr, T[] new_arr, int fst, int lst) {
-        if (fst == lst) return;
+        if (fst >= lst) return;
 
         int mid = (fst + lst) / 2;
 
         mergeHelper(arr, new_arr, fst, mid);
         mergeHelper(arr, new_arr, mid+1, lst);
-        sortHelper(arr, new_arr, fst, mid+1, fst);
+        sortHelper(arr, new_arr, fst, mid, lst);
     }
 
 
-    public static <T extends Comparable<? super T>> void sortHelper(T[] arr, T[] new_arr, int cur1, int cur2, int new_cur) {
-        int mid = cur2;
-        if (new_cur == new_arr.length) return;
+    public static <T extends Comparable<? super T>> void sortHelper(T[] arr, T[] new_arr, int fst, int mid, int lst) {
+        int cur1 = fst;
+        int cur2 = mid + 1;
+        int newcur = fst;
 
-        while((cur1 <= mid) && (cur2 < new_arr.length)) {
+        if (newcur == lst) return;
+
+        while((cur1 <= mid) && (cur2 <= lst)) {
             if (arr[cur1].compareTo(arr[cur2]) < 0) {
-                new_arr[new_cur] = arr[cur1];
-                cur1++;
+                new_arr[newcur++] = arr[cur1++];
             } else {
-                new_arr[new_cur] = arr[cur2];
-                cur2++;
+                new_arr[newcur++] = arr[cur2++];
             } 
-            new_cur++;
         }
 
         // catch cursors up after 1 half is fully sorted
         while (cur1 <= mid) {
-            new_arr[new_cur] = arr[cur1];
-            new_cur++;
-            cur1++;
+            new_arr[newcur++] = arr[cur1++];
         }
-        while (cur2 < new_arr.length) {
-            new_arr[new_cur] = arr[cur2];
-            new_cur++;
-            cur2++;
+        while (cur2 <= lst) {
+            new_arr[newcur++] = arr[cur2++];
         }
 
         // write back to old array
-        System.arraycopy(new_arr, 0, arr, 0, arr.length);
+        System.arraycopy(new_arr, fst, arr, fst, lst-fst+1);
     }
+
 
     /**
      * Sorts the array according to the quick sort algorithm:
